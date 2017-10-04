@@ -1,0 +1,37 @@
+{% extends "Comments/base.html" %}
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block title %}
+    Django reCAPTCHA Tutorial
+{% endblock %}
+
+
+{% block content %}
+
+    {% for comment in comments %}
+    <div class="media">
+        <div class="media-left media-top">
+            <img src="{% static "img/fb_icon.png" %}" class="media-object" style="width:80px">
+        </div>
+        <div class="media-body">
+            <h4 class="media-heading">{{comment.name}} <small><i>Posted on {{ comment.created }}</i></small></h4>
+            <p>{{ comment.text }}</p>
+        </div>
+    </div>
+    <hr>
+    {% endfor %}
+
+    <form action="/" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-success btn-product">
+                <i class="fa fa-check" aria-hidden="true"></i> POST
+            </button>
+        {% endbuttons %}
+    </form>
+
+
+
+{% endblock %}
