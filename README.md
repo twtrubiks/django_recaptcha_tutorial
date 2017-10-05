@@ -18,9 +18,7 @@
 
 ，使用者登入一次就要輸入一次驗證碼，回覆一篇文章也要驗證碼，使用者一定覺得麻煩死了 :angry:
 
- 不過，我們換個角度思考，其實這是在保護使用者，像是避免 CRSF 攻擊（ 可以先了解一下 [CORS-tutorial](https://github.com/twtrubiks/CORS-tutorial)
-
-，CRSF 的說明我會儘快補上一篇文章），也保護網站避免被惡意攻擊，或是被爬蟲機器人瘋狂撈資料等等......
+ 不過，我們換個角度思考，其實這是在保護網站避免表單被惡意攻擊，或是被爬蟲機器人瘋狂撈資料等等......
 
 目前最常用的，就是 google 的驗證碼，所以，今天我要教大家如何透過 [Django](https://github.com/django/django) 使用 Google's reCAPTCHA :grinning:
 
@@ -142,7 +140,7 @@ NOCAPTCHA = True
 
 整體操作完，相信大家應該覺得不難，蠻好上手的，透過 Google's reCAPTCHA 我們可以解決像
 
-是前面所說的各種攻擊，也可以用來減輕登錄頁面上的暴力攻擊，剩下的 Invisible reCAPTCHA 就
+是前面所說的各種攻擊，也可以用來減輕表單頁面上的暴力攻擊，剩下的 Invisible reCAPTCHA 就
 
 留給大家研究 :stuck_out_tongue_closed_eyes:
 
