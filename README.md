@@ -1,6 +1,6 @@
 # django-recaptcha-tutorial 📝
 
- 今天要教大家使用 [Django](https://github.com/django/django) 結合 [Google's reCAPTCHA](https://developers.google.com/recaptcha/) :smile:
+今天要教大家使用 [Django](https://github.com/django/django) 結合 [Google's reCAPTCHA](https://developers.google.com/recaptcha/) :smile:
 
 * [Youtube Tutorial](https://youtu.be/nxPY0F59sjM)
 
@@ -49,6 +49,8 @@ INSTALLED_APPS = [
 
 到這邊我們先停下來，先去 reCAPTCHA admin [https://www.google.com/recaptcha/admin](https://www.google.com/recaptcha/admin) 註冊
 
+(這邊可以選 v3)
+
 ![](https://i.imgur.com/10ykpjB.png)
 
 如果要和我一樣在本地端測試，Domains 打 127.0.0.1 即可，
@@ -65,28 +67,41 @@ RECAPTCHA_PRIVATE_KEY = 'Your Captcha_Private_Key'
 使用的方法也很簡單，直接在 [forms.py](https://github.com/twtrubiks/django_recaptcha_tutorial/blob/master/comments/forms.py) 裡面加上 `ReCaptchaField` field  即可
 
 ```python
+......
+
 class CommentForm(forms.ModelForm):
-    name = forms.CharField(
-        required=True,
-        max_length=20
+    name = forms.CharField(required=True, max_length=20)
+    text = forms.CharField(required=True, max_length=200)
+
+    # captcha = ReCaptchaField()
+
+    # captcha = ReCaptchaField(
+    #     widget=ReCaptchaV2Checkbox(
+    #         attrs={
+    #             # 'data-theme': 'dark',
+    #             "data-size": "compact",
+    #         }
+    #     )
+    # )
+    # captcha = ReCaptchaField(widget=ReCaptchaV2Invisible)
+
+    captcha = ReCaptchaField(
+        widget=ReCaptchaV3(
+            attrs={
+                "required_score": 0.85,
+            }
+        )
     )
 
-    text = forms.CharField(
-        required=True,
-        max_length=200
-    )
-
-    captcha = ReCaptchaField()
-
-    class Meta:
-        model = Comment
-        fields = ('name', 'text', 'captcha')
+......
 ```
+
+(這邊我把各種 reCAPTCHA 類型 的都註解起來, 大家可以自行嘗試, 要注意版本)
 
 前端 render 的部份也很簡單，底下有加上 bootstrap
 
 ```python
-<form action="/" method="post">
+<form action="/comments/" method="post">
         {% csrf_token %}
         {% bootstrap_form form %}
         {% buttons %}
@@ -119,22 +134,27 @@ NOCAPTCHA = True
 
 ## 執行畫面
 
-直接瀏覽 [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+直接瀏覽 [http://127.0.0.1:8000/comments/](http://127.0.0.1:8000/comments/)
 
 ![](https://i.imgur.com/7v0lCnr.png)
 
-相信大部分的使用者都很懶，甚至連點都不想點一下，所以 google 又增加了 Invisible reCAPTCHA
+相信大部分的使用者都很懶，甚至連點都不想點一下，
+
+所以 google 又增加了 Invisible reCAPTCHA
 
 [https://developers.google.com/recaptcha/docs/invisible](https://developers.google.com/recaptcha/docs/invisible)
-，可以讓點擊一下的這個動作被原本的
 
- submit 送出，簡單講，就是在背景幫你處理，對使用者來說，也不用點擊額外的按鈕（操作），
+可以讓點擊一下的這個動作被原本的 submit 送出，
 
- 是不是超級貼心:laughing:
+簡單講，就是在背景幫你處理，
 
- 不過在 [django-recaptcha](https://github.com/praekelt/django-recaptcha) 的 `develop` 分支上並沒有實作該功能，所以如果大家有興趣，可以去
+對使用者來說，也不用點擊額外的按鈕(操作),
 
- 原作者的 [https://github.com/praekelt/django-recaptcha/issues/120](https://github.com/praekelt/django-recaptcha/issues/120) 觀看。
+是不是超級貼心:laughing:
+
+但如果你仔細看, 它其實有把資訊放在 console log 中,
+
+![](https://i.imgur.com/WIkYRLQ.png)
 
 ## 後記
 
@@ -146,7 +166,7 @@ NOCAPTCHA = True
 
 ## 執行環境
 
-* Python 3.6.2
+* Python 3.8
 
 ## Reference
 

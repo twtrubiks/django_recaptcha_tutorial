@@ -8,17 +8,15 @@ from .models import Comment
 
 
 def comments(request):
-    comments_list = Comment.objects.order_by('-created')
+    comments_list = Comment.objects.order_by("-created")
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
             form.save()
     else:
         form = CommentForm()
 
-    return render(request,
-                  'Comments/comment.html', {
-                      'comments': comments_list,
-                      'form': form
-                  })
+    return render(
+        request, "Comments/comment.html", {"comments": comments_list, "form": form}
+    )
